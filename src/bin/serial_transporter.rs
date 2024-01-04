@@ -5,7 +5,7 @@ use serial_transporter::serial_transporter;
 #[async_std::main]
 async fn main()->Result<(), Error>
 {
-    let task = async_std::task::spawn(serial_transporter("./param/serial_transporter.yaml"));
+    let task = async_std::task::spawn(serial_transporter("wheel_serial", "./param/serial_transporter.yaml"));
 
     task.await?;
 
