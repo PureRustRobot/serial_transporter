@@ -1,0 +1,5 @@
+zenoh_params:
+  serial_transporter:
+    sub_topic: "motor_command"
+    port_name: "/dev/ttyACM0"
+    baud_rate: 115200
