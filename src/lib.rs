@@ -35,17 +35,42 @@ pub async fn serial_transporter(
 
         let get_data = deserialize_wheel(sample.value.to_string());
 
-        let write_data = format!("fl{:.4}fr{:.4}rl{:.4}rr{:.4}", get_data.front_left, get_data.front_right, get_data.rear_left, get_data.rear_right);
+        let write_data = MotorControl{
+            id:1,
+            motor_1:get_data.front_left,
+            motor_2:get_data.front_right,
+            motor_3:get_data.rear_left,
+            motor_4:get_data.rear_right,
+        };
 
-        match serialport.write(write_data.as_bytes()) {
+        let mut buf = [0_u8; std::mem::size_of::<MotorControl>()];
+
+        serialize(&write_data, &mut buf);
+
+        let mut vec = buf.to_vec();
+        vec.insert(0, b't');
+        vec.insert(0, b's');
+
+        vec.push(b'e');
+        vec.push(b'n');
+
+        match serialport.write(vec.as_slice()) {
             Ok(_)=>{
                 if let Err(e) = std::io::stdout().flush(){
                     let msg = format!("Failed to flush stdout: {:?}", e);
                     logger::log_error(node_name, msg);
                 }
-                logger::log_info(node_name, sample.value.to_string());
+                logger::log_info(node_name, format!("{:?}", buf));
             },
             Err(e)=>logger::log_error(node_name, e.to_string()),
         }
     }
+}
+
+pub fn serialize<T: Sized>(obj: &T, buf: &mut [u8]) {
+    let size = std::mem::size_of::<T>();
+
+    let obj_ptr = obj as *const T as *const u8;
+    let obj_slice = unsafe { std::slice::from_raw_parts(obj_ptr, size) };
+    buf[..size].copy_from_slice(obj_slice);
 }
