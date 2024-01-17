@@ -9,6 +9,8 @@ use std::{time::Duration, io::Write};
 use serialport;
 use zenoh_manage_utils::logger;
 
+use prr_msgs::msg::*;
+
 pub async fn serial_transporter(
     node_name:&str, 
     sub_topic:&str,
@@ -31,7 +33,11 @@ pub async fn serial_transporter(
     loop {
         let sample = subscriber.recv_async().await?;
 
-        match serialport.write(sample.value.to_string().as_bytes()) {
+        let get_data = deserialize_wheel(sample.value.to_string());
+
+        let write_data = format!("fl{}fr{}rl{}rr{}", get_data.front_left, get_data.front_right, get_data.rear_left, get_data.rear_right);
+
+        match serialport.write(write_data.as_bytes()) {
             Ok(_)=>{
                 if let Err(e) = std::io::stdout().flush(){
                     let msg = format!("Failed to flush stdout: {:?}", e);
