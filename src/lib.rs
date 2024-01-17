@@ -35,7 +35,7 @@ pub async fn serial_transporter(
 
         let get_data = deserialize_wheel(sample.value.to_string());
 
-        let write_data = format!("fl{}fr{}rl{}rr{}", get_data.front_left, get_data.front_right, get_data.rear_left, get_data.rear_right);
+        let write_data = format!("fl{:.4}fr{:.4}rl{:.4}rr{:.4}", get_data.front_left, get_data.front_right, get_data.rear_left, get_data.rear_right);
 
         match serialport.write(write_data.as_bytes()) {
             Ok(_)=>{
