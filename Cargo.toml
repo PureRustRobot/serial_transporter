@@ -10,5 +10,5 @@ serialport = "4.2"
 async-std = "1.0"
 
 zenoh = "0.7.0-rc"
-zenoh_interface = {git = "https://github.com/PureRustRobot/zenoh_interface.git"}
+prr_msgs = {git = "https://github.com/PureRustRobot/prr_msgs.git"}
 zenoh_manage_utils = {git = "https://github.com/PureRustRobot/zenoh_manage_utils.git"}

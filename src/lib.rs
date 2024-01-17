@@ -7,15 +7,16 @@ use zenoh::{
 use std::{time::Duration, io::Write};
 
 use serialport;
-use zenoh_manage_utils::{param, logger};
+use zenoh_manage_utils::logger;
 
-pub async fn serial_transporter(node_name:&str, yaml_path:&str)->Result<(), Error>
+pub async fn serial_transporter(
+    node_name:&str, 
+    sub_topic:&str,
+    port_name:&str,
+    baud_rate:u32
+)->Result<(), Error>
 {
     let session = zenoh::open(Config::default()).res().await.unwrap();
-
-    let sub_topic = param::get_str_param(yaml_path, node_name, "sub_topic", "motor_command".to_string());
-    let port_name = param::get_str_param(yaml_path, node_name, "port_name", "/dev/ttyACM0".to_string());
-    let baud_rate = param::get_i64_param(yaml_path, node_name, "baud_rate", 115200) as u32;
 
     let subscriber = session.declare_subscriber(sub_topic).res().await.unwrap();
 
