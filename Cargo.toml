@@ -6,9 +6,9 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-serialport = "4.2"
+serialport = "4.2.0"
 async-std = "1.0"
 
 zenoh = "0.7.0-rc"
-zenoh_manage_utils = {git = "https://github.com/PureRustRobot/zenoh_manage_utils.git"}
+prr_utils = {git = "https://github.com/PureRustRobot/prr_utils.git"}
 prr_msgs = {git = "https://github.com/PureRustRobot/prr_msgs.git"}

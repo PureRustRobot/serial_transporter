@@ -9,7 +9,8 @@ async fn main()->Result<(), Error>
         "wheel_serial", 
         "motor_command",
         "/dev/ttyACM0",
-        115200)
+        115200,
+        false)
     );
 
     task.await?;
